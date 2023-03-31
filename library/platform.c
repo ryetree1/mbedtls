@@ -61,18 +61,29 @@ void *mbedtls_calloc(size_t nmemb, size_t size)
     return (*mbedtls_calloc_func)(nmemb, size);
 }
 
-void mbedtls_free(void *ptr)
+#include "psram_reserve.h"// LEV-MOD
+static void* Psram_calloc_func(size_t nelements, size_t elementSize) // LEV-MOD
 {
-    (*mbedtls_free_func)(ptr);
+	size_t size;
+	void *ptr = NULL;
+
+	size = nelements * elementSize;
+    ptr = Psram_reserve_malloc(size);
+
+	if(ptr)
+		_memset(ptr, 0, size);
+
+	return ptr;
 }
 
-int mbedtls_platform_set_calloc_free(void *(*calloc_func)(size_t, size_t),
-                                     void (*free_func)(void *))
+int mbedtls_platform_set_calloc_free( void * (*calloc_func)( size_t, size_t ),
+                              void (*free_func)( void * ) )
 {
-    mbedtls_calloc_func = calloc_func;
-    mbedtls_free_func = free_func;
-    return 0;
+    mbedtls_calloc_func = Psram_calloc_func;//calloc_func;  LEV-MOD
+    mbedtls_free_func = Psram_reserve_free;//free_func;	LEV-MOD
+    return( 0 );
 }
+
 #endif /* MBEDTLS_PLATFORM_MEMORY &&
           !( defined(MBEDTLS_PLATFORM_CALLOC_MACRO) &&
              defined(MBEDTLS_PLATFORM_FREE_MACRO) ) */
