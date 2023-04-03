@@ -20,7 +20,11 @@
 #ifndef PSA_CRYPTO_TEST_DRIVERS_CIPHER_H
 #define PSA_CRYPTO_TEST_DRIVERS_CIPHER_H
 
-#include "mbedtls/build_info.h"
+#if !defined(MBEDTLS_CONFIG_FILE)
+#include "mbedtls/config.h"
+#else
+#include MBEDTLS_CONFIG_FILE
+#endif
 
 #if defined(PSA_CRYPTO_DRIVER_TEST)
 #include <psa/crypto_driver_common.h>
@@ -41,10 +45,10 @@ typedef struct {
 
 #define MBEDTLS_TEST_DRIVER_CIPHER_INIT { NULL, 0, PSA_SUCCESS, 0 }
 static inline mbedtls_test_driver_cipher_hooks_t
-mbedtls_test_driver_cipher_hooks_init(void)
+     mbedtls_test_driver_cipher_hooks_init( void )
 {
     const mbedtls_test_driver_cipher_hooks_t v = MBEDTLS_TEST_DRIVER_CIPHER_INIT;
-    return v;
+    return( v );
 }
 
 extern mbedtls_test_driver_cipher_hooks_t mbedtls_test_driver_cipher_hooks;
@@ -77,7 +81,7 @@ psa_status_t mbedtls_test_transparent_cipher_decrypt_setup(
     psa_algorithm_t alg);
 
 psa_status_t mbedtls_test_transparent_cipher_abort(
-    mbedtls_transparent_test_driver_cipher_operation_t *operation);
+    mbedtls_transparent_test_driver_cipher_operation_t *operation );
 
 psa_status_t mbedtls_test_transparent_cipher_set_iv(
     mbedtls_transparent_test_driver_cipher_operation_t *operation,

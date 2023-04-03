@@ -45,10 +45,7 @@
  * purpose of a specific set of tests.
  */
 //#define MBEDTLS_SHA1_C
-//#define MBEDTLS_SHA224_C
-//#define MBEDTLS_SHA384_C
 //#define MBEDTLS_SHA512_C
-//#define MBEDTLS_MD_C
 //#define MBEDTLS_PEM_PARSE_C
 //#define MBEDTLS_BASE64_C
 

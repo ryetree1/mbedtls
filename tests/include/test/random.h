@@ -25,16 +25,21 @@
 #ifndef TEST_RANDOM_H
 #define TEST_RANDOM_H
 
-#include "mbedtls/build_info.h"
+#if !defined(MBEDTLS_CONFIG_FILE)
+#include "mbedtls/config.h"
+#else
+#include MBEDTLS_CONFIG_FILE
+#endif
 
 #include <stddef.h>
 #include <stdint.h>
 
-typedef struct {
+typedef struct
+{
     unsigned char *buf; /* Pointer to a buffer of length bytes. */
     size_t length;
     /* If fallback_f_rng is NULL, fail after delivering length bytes. */
-    int (*fallback_f_rng)(void *, unsigned char *, size_t);
+    int ( *fallback_f_rng )( void*, unsigned char *, size_t );
     void *fallback_p_rng;
 } mbedtls_test_rnd_buf_info;
 
@@ -45,7 +50,8 @@ typedef struct {
  * Do not forget endianness!
  * State( v0, v1 ) should be set to zero.
  */
-typedef struct {
+typedef struct
+{
     uint32_t key[16];
     uint32_t v0, v1;
 } mbedtls_test_rnd_pseudo_info;
@@ -59,18 +65,18 @@ typedef struct {
  *
  * rng_state shall be NULL.
  */
-int mbedtls_test_rnd_std_rand(void *rng_state,
-                              unsigned char *output,
-                              size_t len);
+int mbedtls_test_rnd_std_rand( void *rng_state,
+                               unsigned char *output,
+                               size_t len );
 
 /**
  * This function only returns zeros.
  *
  * \p rng_state shall be \c NULL.
  */
-int mbedtls_test_rnd_zero_rand(void *rng_state,
-                               unsigned char *output,
-                               size_t len);
+int mbedtls_test_rnd_zero_rand( void *rng_state,
+                                unsigned char *output,
+                                size_t len );
 
 /**
  * This function returns random data based on a buffer it receives.
@@ -84,9 +90,9 @@ int mbedtls_test_rnd_zero_rand(void *rng_state,
  * #mbedtls_test_rnd_buf_info structure if there is one, and
  * will return #MBEDTLS_ERR_ENTROPY_SOURCE_FAILED otherwise.
  */
-int mbedtls_test_rnd_buffer_rand(void *rng_state,
-                                 unsigned char *output,
-                                 size_t len);
+int mbedtls_test_rnd_buffer_rand( void *rng_state,
+                                  unsigned char *output,
+                                  size_t len );
 
 /**
  * This function returns random based on a pseudo random function.
@@ -96,8 +102,8 @@ int mbedtls_test_rnd_buffer_rand(void *rng_state,
  *
  * \p rng_state shall be a pointer to a #mbedtls_test_rnd_pseudo_info structure.
  */
-int mbedtls_test_rnd_pseudo_rand(void *rng_state,
-                                 unsigned char *output,
-                                 size_t len);
+int mbedtls_test_rnd_pseudo_rand( void *rng_state,
+                                  unsigned char *output,
+                                  size_t len );
 
 #endif /* TEST_RANDOM_H */

@@ -1,9 +1,7 @@
 MBEDTLS_TEST_PATH:=../../tests/src
 MBEDTLS_TEST_OBJS:=$(patsubst %.c,%.o,$(wildcard ${MBEDTLS_TEST_PATH}/*.c ${MBEDTLS_TEST_PATH}/drivers/*.c))
 
-CFLAGS ?= -O2
-WARNING_CFLAGS ?= -Wall -Wextra
-LOCAL_CFLAGS = $(WARNING_CFLAGS) -I../../tests/include -I../../include -D_FILE_OFFSET_BITS=64
+LOCAL_CFLAGS = -I../../tests/include -I../../include -D_FILE_OFFSET_BITS=64
 LOCAL_LDFLAGS = ${MBEDTLS_TEST_OBJS}		\
 		-L../../library			\
 		-lmbedtls$(SHARED_SUFFIX)	\
@@ -22,6 +20,11 @@ endif
 DLEXT ?= so
 EXEXT=
 SHARED_SUFFIX=
+
+# Zlib shared library extensions:
+ifdef ZLIB
+LOCAL_LDFLAGS += -lz
+endif
 
 ifdef FUZZINGENGINE
 LOCAL_LDFLAGS += -lFuzzingEngine

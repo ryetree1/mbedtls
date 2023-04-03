@@ -33,6 +33,8 @@
  *
  * See README.txt for usage instructions.
  */
+#ifndef MBEDTLS_CONFIG_H
+#define MBEDTLS_CONFIG_H
 
 /* System support */
 //#define MBEDTLS_HAVE_TIME /* Optionally used in Hello messages */
@@ -60,16 +62,15 @@
  * save ROM and a few bytes of RAM by specifying our own ciphersuite list
  */
 #define MBEDTLS_SSL_CIPHERSUITES                        \
-    MBEDTLS_TLS_PSK_WITH_AES_256_CCM_8,             \
-    MBEDTLS_TLS_PSK_WITH_AES_128_CCM_8
+        MBEDTLS_TLS_PSK_WITH_AES_256_CCM_8,             \
+        MBEDTLS_TLS_PSK_WITH_AES_128_CCM_8
 
 /*
  * Save RAM at the expense of interoperability: do this only if you control
  * both ends of the connection!  (See comments in "mbedtls/ssl.h".)
  * The optimal size here depends on the typical size of records.
  */
-#define MBEDTLS_SSL_IN_CONTENT_LEN              1024
-#define MBEDTLS_SSL_OUT_CONTENT_LEN             1024
+#define MBEDTLS_SSL_MAX_CONTENT_LEN             1024
 
 /* Save RAM at the expense of ROM */
 #define MBEDTLS_AES_ROM_TABLES
@@ -93,3 +94,7 @@
  * (huge code size increase, needed for tests/ssl-opt.sh) */
 //#define MBEDTLS_DEBUG_C
 //#define MBEDTLS_ERROR_C
+
+#include "mbedtls/check_config.h"
+
+#endif /* MBEDTLS_CONFIG_H */
